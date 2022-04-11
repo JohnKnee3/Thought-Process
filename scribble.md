@@ -163,3 +163,43 @@ res.status(404).send("<h1>😝 404 Error!</h1>");
 module.exports = router;
 
 Line 152 and 156 are the new things we added here.
+
+# 18.1.8
+
+We tested all the controllers/api routes in insomnia then we went to the front end add-pizza.js and added the fetch so when you hit submit it updates the DB.
+
+const handlePizzaSubmit = (event) => {
+event.preventDefault();
+
+const pizzaName = $pizzaForm.querySelector("#pizza-name").value;
+  const createdBy = $pizzaForm.querySelector("#created-by").value;
+  const size = $pizzaForm.querySelector("#pizza-size").value;
+  const toppings = [
+    ...$pizzaForm.querySelectorAll("[name=topping]:checked"),
+].map((topping) => {
+return topping.value;
+});
+
+if (!pizzaName || !createdBy || !toppings.length) {
+return;
+}
+
+const formData = { pizzaName, createdBy, size, toppings };
+
+fetch("/api/pizzas", {
+method: "POST",
+headers: {
+Accept: "application/json",
+"Content-Type": "application/json",
+},
+body: JSON.stringify(formData),
+})
+.then((response) => response.json())
+.then((postResponse) => {
+alert("Pizza created successfully!");
+console.log(postResponse);
+})
+.catch((err) => {
+console.log(err);
+});
+};
