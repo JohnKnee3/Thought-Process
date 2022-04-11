@@ -228,3 +228,46 @@ const Comment = model("Comment", CommentSchema);
 module.exports = Comment;
 
 Now we are going to set up it's relationship to the Pizza Model.
+
+# 18.2.4
+
+We told the Pizza Model to look for the Comment Model and grab all comments and toss them into an array.
+
+const PizzaSchema = new Schema(
+{
+pizzaName: {
+type: String,
+},
+createdBy: {
+type: String,
+},
+createdAt: {
+type: Date,
+default: Date.now,
+},
+size: {
+type: String,
+default: "Large",
+},
+toppings: [],
+comments: [
+{
+type: Schema.Types.ObjectId,
+ref: "Comment",
+},
+],
+},
+{
+toJSON: {
+virtuals: true,
+},
+id: false,
+}
+);
+
+// get total count of comments and replies on retrieval
+PizzaSchema.virtual("commentCount").get(function () {
+return this.comments.length;
+});
+
+This is line 253 - 258. Then we created something called a virtual and used it to to count how many comments are present and then allowed it to show up Model in the schema options which start at line 261 and end at line 265.
