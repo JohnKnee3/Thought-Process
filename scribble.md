@@ -271,3 +271,53 @@ return this.comments.length;
 });
 
 This is line 253 - 258. Then we created something called a virtual and used it to to count how many comments are present and then allowed it to show up Model in the schema options which start at line 261 and end at line 265.
+
+# 18.2.5
+
+This one was some aggresive copy pasta that I am unable to test yet seeing as how we do not have the routes set up. So we created a file called comment-controller.js and required the Pizza and the Comment Model. Then we added the ability to add a comment.
+
+addComment({ params, body }, res) {
+console.log(body);
+Comment.create(body)
+.then(({ \_id }) => {
+return Pizza.findOneAndUpdate(
+{ \_id: params.pizzaId },
+{ $push: { comments: \_id } },
+{ new: true }
+);
+})
+.then((dbPizzaData) => {
+if (!dbPizzaData) {
+res.status(404).json({ message: "No pizza found with this id!" });
+return;
+}
+res.json(dbPizzaData);
+})
+.catch((err) => res.json(err));
+},
+
+I will need to test these out to understand it more later. Next we added the ability to remove a comment from a pizza.
+
+removeComment({ params }, res) {
+Comment.findOneAndDelete({ \_id: params.commentId })
+.then((deletedComment) => {
+if (!deletedComment) {
+return res.status(404).json({ message: "No comment with this id!" });
+}
+return Pizza.findOneAndUpdate(
+{ \_id: params.pizzaId },
+{ $pull: { comments: params.commentId } },
+{ new: true }
+);
+})
+.then((dbPizzaData) => {
+if (!dbPizzaData) {
+res.status(404).json({ message: "No pizza found with this id!" });
+return;
+}
+res.json(dbPizzaData);
+})
+.catch((err) => res.json(err));
+},
+
+Again testing will be needed for me to fully understand this code.
