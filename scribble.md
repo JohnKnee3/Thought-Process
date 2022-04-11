@@ -321,3 +321,30 @@ res.json(dbPizzaData);
 },
 
 Again testing will be needed for me to fully understand this code.
+
+# 18.2.7
+
+Set up the front end to show the pizzas with this.
+
+const getPizzaList = () => {
+fetch("/api/pizzas")
+.then((response) => response.json())
+.then((pizzaListArr) => {
+pizzaListArr.forEach(printPizza);
+})
+.catch((err) => {
+console.log(err);
+});
+};
+
+We then called this at the bottom of pizza-list.js and call the already built print pizza for everything that is already there.
+
+Finally we updated the pizza Model to look at the time and convert it into something that looks good. We set this up by using our date format middleware and then in the Pizza model using something called a getter.
+
+createdAt: {
+type: Date,
+default: Date.now,
+get: (createdAtVal) => dateFormat(createdAtVal),
+},
+
+We also had to allow it in the options by adding `getters: true`
