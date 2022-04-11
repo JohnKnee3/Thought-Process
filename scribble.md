@@ -203,3 +203,28 @@ console.log(postResponse);
 console.log(err);
 });
 };
+
+# 18.2.3
+
+Set up the Comment Model. Looks like this.
+
+const { Schema, model } = require("mongoose");
+
+const CommentSchema = new Schema({
+writtenBy: {
+type: String,
+},
+commentBody: {
+type: String,
+},
+createdAt: {
+type: Date,
+default: Date.now,
+},
+});
+
+const Comment = model("Comment", CommentSchema);
+
+module.exports = Comment;
+
+Now we are going to set up it's relationship to the Pizza Model.
