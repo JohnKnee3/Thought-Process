@@ -648,3 +648,7 @@ pizzaObjectStore.add(record);
 }
 
 Then we had to slide into add-pizza.js to the handlePizzaSubmit and at the very bottom in it's .catch we add the call to the saveRecord(formData) passing in the formData variable to be saved.
+
+# 18.4.5 & 18.4.6
+
+We set up the ability to test the functionality of the save feature when offline. These sections were a little dense and made getting them done back to back feel pressing. It will be best to come back and read step by step as they have several good images to help guide you through the dev tools skills needed to test this out.
