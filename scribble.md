@@ -652,3 +652,33 @@ Then we had to slide into add-pizza.js to the handlePizzaSubmit and at the very 
 # 18.4.5 & 18.4.6
 
 We set up the ability to test the functionality of the save feature when offline. These sections were a little dense and made getting them done back to back feel pressing. It will be best to come back and read step by step as they have several good images to help guide you through the dev tools skills needed to test this out.
+
+# 18.5.3
+
+Added validation to the Pizza model. This one is fairly straight forward.
+
+const PizzaSchema = new Schema(
+{
+pizzaName: {
+type: String,
+required: true,
+trim: true,
+},
+createdBy: {
+type: String,
+required: true,
+trim: true,
+},
+createdAt: {
+type: Date,
+default: Date.now,
+get: (createdAtVal) => dateFormat(createdAtVal),
+},
+size: {
+type: String,
+required: true,
+enum: ["Personal", "Small", "Medium", "Large", "Extra Large"],
+default: "Large",
+},
+
+    We added required and enum to make sure these exact things exist in the model.
