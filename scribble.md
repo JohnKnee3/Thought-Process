@@ -543,3 +543,50 @@ router.route("/:pizzaId/:commentId/:replyId").delete(removeReply);
 module.exports = router;
 
 But basically we slid the new .put route in the the exsisting delete route since they share the same path and had to add a new one to delete a specific reply.
+
+# 18.3.6
+
+Added the front end code to beable to use the PUT reply api we just set up.
+
+function handleNewReplySubmit(event) {
+event.preventDefault();
+
+if (!event.target.matches('.reply-form')) {
+return false;
+}
+
+const commentId = event.target.getAttribute('data-commentid');
+
+const writtenBy = event.target.querySelector('[name=reply-name]').value;
+const replyBody = event.target.querySelector('[name=reply]').value;
+
+if (!replyBody || !writtenBy) {
+return false;
+}
+
+const formData = { writtenBy, replyBody };
+
+fetch(`/api/comments/${pizzaId}/${commentId}`, {
+method: 'PUT',
+headers: {
+Accept: 'application/json',
+'Content-Type': 'application/json'
+},
+body: JSON.stringify(formData)
+})
+.then(response => {
+if (!response.ok) {
+throw new Error('Something went wrong!');
+}
+response.json();
+})
+.then(commentResponse => {
+console.log(commentResponse);
+location.reload();
+})
+.catch(err => {
+console.log(err);
+});
+}
+
+This was really a copy and paste of the comment submit with only needing to change POST to PUT and use the ${commentId} variable which was set up for us.
