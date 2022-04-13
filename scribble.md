@@ -414,3 +414,77 @@ console.log(err);
 }
 
 This worked almost exactly like the handle pizza submit with the main difference of adding the ${pizzaId} to the fetch route so it know to get that which comes from the let up top.
+
+# 18.3.4
+
+Added a ReplySchema to the Comment.js. Here we did not create a new model because we will never query just for reply data. First we added the ReplySchema above the comments schema.
+
+const ReplySchema = new Schema(
+{
+// set custom id to avoid confusion with parent comment \_id
+replyId: {
+type: Schema.Types.ObjectId,
+default: () => new Types.ObjectId(),
+},
+replyBody: {
+type: String,
+},
+writtenBy: {
+type: String,
+},
+createdAt: {
+type: Date,
+default: Date.now,
+get: (createdAtVal) => dateFormat(createdAtVal),
+},
+},
+{
+toJSON: {
+getters: true,
+},
+}
+);
+
+We added the getter so it will use the date formatter. We also required the date formatter up top so we can use it in this file. Next we updated the comment schema to look for replies and brought in the date formatter and gave it permission to view use a vitual.
+
+const CommentSchema = new Schema(
+{
+writtenBy: {
+type: String,
+},
+commentBody: {
+type: String,
+},
+createdAt: {
+type: Date,
+default: Date.now,
+get: (createdAtVal) => dateFormat(createdAtVal),
+},
+// use ReplySchema to validate data for a reply
+replies: [ReplySchema],
+},
+{
+toJSON: {
+virtuals: true,
+getters: true,
+},
+id: false,
+}
+);
+
+Lastly we added the Virtual that will count the legnth of the replies array to give us it's count.
+
+CommentSchema.virtual("replyCount").get(function () {
+return this.replies.length;
+});
+
+Then in a suprise pivot we jumped over to the Pizza.js model and upated it's virtual to get all complicated.
+
+PizzaSchema.virtual("commentCount").get(function () {
+return this.comments.reduce(
+(total, comment) => total + comment.replies.length + 1,
+0
+);
+});
+
+This is the first time we have been introduced to the .reduce(). It basically walks through the array and adds to the total everytime it finds a comment.
