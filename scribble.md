@@ -348,3 +348,69 @@ get: (createdAtVal) => dateFormat(createdAtVal),
 },
 
 We also had to allow it in the options by adding `getters: true`
+
+# 18.3.3
+
+We set up the front end to single-pizza.js. We first added the code to display the single get.
+
+function getPizza() {
+// get id of pizza
+const searchParams = new URLSearchParams(document.location.search.substring(1));
+const pizzaId = searchParams.get('id');
+
+// get pizzaInfo
+fetch(`/api/pizzas/${pizzaId}`)
+.then(response => {
+if (!response.ok) {
+throw new Error({ message: 'Something went wrong!' });
+}
+
+      return response.json();
+    })
+    .then(printPizza)
+    .catch(err => {
+      console.log(err);
+      alert('Cannot find a pizza with this id! Taking you back.');
+      window.history.back();
+    });
+
+}
+
+Then we added the ability to create a new comment on the front end.
+
+function handleNewCommentSubmit(event) {
+event.preventDefault();
+
+const commentBody = $newCommentForm.querySelector('#comment').value;
+const writtenBy = $newCommentForm.querySelector('#written-by').value;
+
+if (!commentBody || !writtenBy) {
+return false;
+}
+
+const formData = { commentBody, writtenBy };
+
+fetch(`/api/comments/${pizzaId}`, {
+method: 'POST',
+headers: {
+Accept: 'application/json',
+'Content-Type': 'application/json'
+},
+body: JSON.stringify(formData)
+})
+.then(response => {
+if (!response.ok) {
+throw new Error('Something went wrong!');
+}
+response.json();
+})
+.then(commentResponse => {
+console.log(commentResponse);
+location.reload();
+})
+.catch(err => {
+console.log(err);
+});
+}
+
+This worked almost exactly like the handle pizza submit with the main difference of adding the ${pizzaId} to the fetch route so it know to get that which comes from the let up top.
