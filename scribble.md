@@ -630,3 +630,21 @@ console.log(event.target.errorCode);
 };
 
 The brief over view is the lines 603 and 605 connect us. Lines 608-613 build the inital database and won't be called again unless we drop it or update it's version number. Finally lines 616-625 update the db variable everytime we interact with the database. This will require a bit more coding that is why line 22 commented out.
+
+# 18.4.5
+
+We added a saveRecord function that will save the information if there is no internet connection.
+
+// This function will be executed if we attempt to submit a new pizza and there's no internet connection
+function saveRecord(record) {
+// open a new transaction with the database with read and write permissions
+const transaction = db.transaction(["new_pizza"], "readwrite");
+
+// access the object store for `new_pizza`
+const pizzaObjectStore = transaction.objectStore("new_pizza");
+
+// add record to your store with add method
+pizzaObjectStore.add(record);
+}
+
+Then we had to slide into add-pizza.js to the handlePizzaSubmit and at the very bottom in it's .catch we add the call to the saveRecord(formData) passing in the formData variable to be saved.
