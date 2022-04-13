@@ -590,3 +590,43 @@ console.log(err);
 }
 
 This was really a copy and paste of the comment submit with only needing to change POST to PUT and use the ${commentId} variable which was set up for us.
+
+# 18.4.4
+
+We created a new file in public/assets/js and named it idb.js. We then went into add-pizza.html and this
+
+<script src="./assets/js/idb.js"></script>
+
+So it knows to run look for this file. Then we added all of this
+
+// create variable to hold db connection
+let db;
+// establish a connection to IndexedDB database called 'pizza_hunt' and set it to version 1
+const request = indexedDB.open("pizza_hunt", 1);
+
+// this event will emit if the database version changes (nonexistant to version 1, v1 to v2, etc.)
+request.onupgradeneeded = function (event) {
+// save a reference to the database
+const db = event.target.result;
+// create an object store (table) called `new_pizza`, set it to have an auto incrementing primary key of sorts
+db.createObjectStore("new_pizza", { autoIncrement: true });
+};
+
+// upon a successful
+request.onsuccess = function (event) {
+// when db is successfully created with its object store (from onupgradedneeded event above) or simply established a connection, save reference to db in global variable
+db = event.target.result;
+
+// check if app is online, if yes run uploadPizza() function to send all local db data to api
+if (navigator.onLine) {
+// we haven't created this yet, but we will soon, so let's comment it out for now
+// uploadPizza();
+}
+};
+
+request.onerror = function (event) {
+// log error here
+console.log(event.target.errorCode);
+};
+
+The brief over view is the lines 603 and 605 connect us. Lines 608-613 build the inital database and won't be called again unless we drop it or update it's version number. Finally lines 616-625 update the db variable everytime we interact with the database. This will require a bit more coding that is why line 22 commented out.
