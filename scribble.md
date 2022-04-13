@@ -488,3 +488,58 @@ return this.comments.reduce(
 });
 
 This is the first time we have been introduced to the .reduce(). It basically walks through the array and adds to the total everytime it finds a comment.
+
+# 18.3.5
+
+We set up the back end api to add a reply to a comment. In comment-controllers we added this.
+
+addReply({ params, body }, res) {
+Comment.findOneAndUpdate(
+{ \_id: params.commentId },
+{ $push: { replies: body } },
+{ new: true }
+)
+.then(dbPizzaData => {
+if (!dbPizzaData) {
+res.status(404).json({ message: 'No pizza found with this id!' });
+return;
+}
+res.json(dbPizzaData);
+})
+.catch(err => res.json(err));
+},
+
+After that we added the remove a reply which looked like this.
+
+// remove reply
+removeReply({ params }, res) {
+Comment.findOneAndUpdate(
+{ \_id: params.commentId },
+{ $pull: { replies: { replyId: params.replyId } } },
+{ new: true }
+)
+.then(dbPizzaData => res.json(dbPizzaData))
+.catch(err => res.json(err));
+}
+
+All of this would have been so helpful on Monday as this is a one to one of what I had to solve on my own. Finally we set all of this up in the comment-routes.js. This is the new end result.
+
+const router = require("express").Router();
+const {
+addComment,
+removeComment,
+addReply,
+removeReply,
+} = require("../../controllers/comment-controller");
+
+// /api/comments/<pizzaId>
+router.route("/:pizzaId").post(addComment);
+
+// /api/comments/<pizzaId>/<commentId>
+router.route("/:pizzaId/:commentId").put(addReply).delete(removeComment);
+
+router.route("/:pizzaId/:commentId/:replyId").delete(removeReply);
+
+module.exports = router;
+
+But basically we slid the new .put route in the the exsisting delete route since they share the same path and had to add a new one to delete a specific reply.
