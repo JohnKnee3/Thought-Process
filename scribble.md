@@ -682,3 +682,31 @@ default: "Large",
 },
 
     We added required and enum to make sure these exact things exist in the model.
+
+# 18.5.4
+
+Added validation to the reply and comment schemas.
+
+replyBody: {
+type: String,
+required: true,
+trim: true,
+},
+writtenBy: {
+type: String,
+required: true,
+},
+
+    &
+
+    {
+    writtenBy: {
+      type: String,
+      required: true,
+    },
+    commentBody: {
+      type: String,
+      required: true,
+    },
+
+    Then had to add runValidators: true to the add a reply to a comment since it is a findOneAndUpdate.
