@@ -16,6 +16,12 @@ const UserSchema = new Schema({
       "Must enter a valid email",
     ],
   },
+  thoughts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Thought",
+    },
+  ],
 });
 
 const User = model("User", UserSchema);
