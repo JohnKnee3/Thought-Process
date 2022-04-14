@@ -13,7 +13,7 @@ This is the back end for a social media platform knowon as Thought-Process. In h
 
 ## Usage
 
-To use download the files above and then navigate to your terminal. Once there type `npm i` to get your packages installed and finally type in `npm start` and then go test your routes in insomnia.
+To use this program simply download the files above and then navigate to your terminal. Once there type `npm i` to get your packages installed and finally type in `npm start` to fire it up. After that you are good to go and can test these routes in insomnia.
 
 ## Questions
 
