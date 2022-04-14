@@ -7,7 +7,7 @@
 
 ## Description
 
-This is the back end for a social media platform knowon as Thought-Process. In here Users can create posts called thoughts and then other users can comment on these thoughts. We aslo have friends list functionality. Here is a <a href="https://drive.google.com/file/d/1kUoUg9vKsp117-apikklWmsNFd2ZW9ij/view" target="_blank">link</a> if you want to see the program in action.
+This is the back end for a social media platform knowon as Thought-Process. In here Users can create posts called thoughts and then other users can comment on these thoughts. We aslo have friends list functionality. Here is a <a href="https://drive.google.com/file/d/1kUoUg9vKsp117-apikklWmsNFd2ZW9ij/view">link</a> if you want to see the program in action.
 
 <img src="images/Screenshot.jpg" alt="Brief snip of the program running in insomnia.">
 
